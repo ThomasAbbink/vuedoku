@@ -5,13 +5,13 @@ import { watch } from 'vue'
 import Button from '../components/Button.vue'
 import { cellValues, type Cell, type CellValue } from '@/model/Sudoku'
 
-const { grid, $reset } = useSudoku()
+const { grid, newGame, resetGame } = useSudoku()
 
 watch(
-  grid.cells,
+  grid,
   (state) => {
     // persist the whole state to the local storage whenever it changes
-    localStorage.setItem('cells', JSON.stringify(state))
+    localStorage.setItem('cells', JSON.stringify(state.cells))
   },
   { deep: true }
 )
@@ -67,6 +67,9 @@ const handleInput = (event: Event, cell: Cell) => {
         />
       </li>
     </ol>
-    <Button @click="$reset"> New game </Button>
+    <div class="flex gap-2">
+      <Button @click="newGame"> New game </Button>
+      <Button @click="resetGame">Reset</Button>
+    </div>
   </div>
 </template>
