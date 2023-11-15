@@ -25,7 +25,7 @@ export type Grid = {
   cells: Array<Cell>
 }
 
-export const emptyGrid = () => {
+export const empty = () => {
   return [...Array(81).keys()].map((i): Cell => {
     const blockRow = Math.floor(i / 27) % 3
     const blockCol = Math.floor((i % 9) / 3)
@@ -40,9 +40,9 @@ export const emptyGrid = () => {
   })
 }
 
-export const createCells = ({ difficulty }: { difficulty: Difficulty }): Grid['cells'] => {
+export const create = ({ difficulty }: { difficulty: Difficulty }): Grid['cells'] => {
   let failure = false
-  const cells = emptyGrid()
+  const cells = empty()
 
   for (let i = 0; i < 81; i++) {
     // pick one of the empty cells that has the lowest number of possible values
@@ -72,7 +72,7 @@ export const createCells = ({ difficulty }: { difficulty: Difficulty }): Grid['c
   // This is a bit iffy. This method will run into a contradiction sometimes.
   // in that case, start over.
   if (failure) {
-    return createCells({ difficulty })
+    return create({ difficulty })
   } else {
     return cells
   }
