@@ -21,8 +21,9 @@ const difficulties: Record<Difficulty, number> = {
   hard: 0.3
 }
 
-export type Grid = {
-  cells: Array<Cell>
+export type Game = {
+  grid: Array<Cell>
+  difficulty: Difficulty
 }
 
 export const empty = () => {
@@ -40,13 +41,13 @@ export const empty = () => {
   })
 }
 
-export const create = ({ difficulty }: { difficulty: Difficulty }): Grid['cells'] => {
+export const create = ({ difficulty }: { difficulty: Difficulty }): Game['grid'] => {
   let failure = false
-  const cells = empty()
+  const grid = empty()
 
   for (let i = 0; i < 81; i++) {
     // pick one of the empty cells that has the lowest number of possible values
-    const nextCell = cells
+    const nextCell = grid
       .filter((cell) => !cell.value)
       .reduce((acc, curr) => {
         return curr.possibleValues.length < acc.possibleValues.length ? curr : acc
@@ -62,7 +63,7 @@ export const create = ({ difficulty }: { difficulty: Difficulty }): Grid['cells'
       nextCell.possibleValues[Math.floor(Math.random() * nextCell.possibleValues.length)]
 
     // remove the selected value from the affected cells
-    propagatePossibleValues(nextCell, cells)
+    propagatePossibleValues(nextCell, grid)
 
     //
     if (Math.random() < difficulties[difficulty]) {
@@ -74,13 +75,13 @@ export const create = ({ difficulty }: { difficulty: Difficulty }): Grid['cells'
   if (failure) {
     return create({ difficulty })
   } else {
-    return cells
+    return grid
   }
 }
 
 //warning: this mutates the array in place
-const propagatePossibleValues = (cell: Cell, cells: Grid['cells']) => {
-  cells
+const propagatePossibleValues = (cell: Cell, grid: Game['grid']) => {
+  grid
     .filter((affectedCell) => {
       return (
         affectedCell.x === cell.x || affectedCell.y === cell.y || affectedCell.block === cell.block

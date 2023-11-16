@@ -5,13 +5,12 @@ import { watch } from 'vue'
 import Button from '../components/Button.vue'
 import { cellValues, type Cell, type CellValue } from '@/model/Sudoku'
 
-const { grid, newGame, resetGame } = useSudoku()
+const { game, newGame, resetGame, persist } = useSudoku()
 
 watch(
-  grid,
+  game,
   (state) => {
-    // persist the whole state to the local storage whenever it changes
-    localStorage.setItem('cells', JSON.stringify(state.cells))
+    persist(state)
   },
   { deep: true }
 )
@@ -40,13 +39,25 @@ const handleInput = (event: Event, cell: Cell) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6 items-center">
+    <div class="flex items-end gap-2">
+      <span class="font-mono text-white items-center flex text-sm h-fit">difficulty: </span
+      ><span
+        class="before:bg-red-400/80 h-fit text-white before:content-[''] before:absolute before:inset-0 flex relative w-fit before:z-[-1] z-10 before:skew-x-12 px-1"
+      >
+        {{ game.difficulty }}</span
+      >
+    </div>
+    <div class="flex gap-2">
+      <Button @click="newGame"> New game </Button>
+      <Button @click="resetGame">Reset</Button>
+    </div>
     <ol
-      v-if="grid.cells"
+      v-if="game.grid"
       class="grid grid-cols-[repeat(9,2.5rem)] grid-rows-[repeat(9,2.5rem)] w-fit place-self-center"
     >
       <li
-        v-for="cell in grid.cells"
+        v-for="cell in game.grid"
         :key="cell.index"
         class="[&:nth-child(3n+0)]:border-r-4 [&:nth-child(9n)]:border-r-0 border-slate-800 [&:nth-child(n+19)]:border-b-4 [&:nth-child(n+28)]:!border-b-0 [&:nth-child(n+46)]:!border-b-4 [&:nth-child(n+55)]:!border-b-0 select-none"
       >
@@ -67,9 +78,5 @@ const handleInput = (event: Event, cell: Cell) => {
         />
       </li>
     </ol>
-    <div class="flex gap-2">
-      <Button @click="newGame"> New game </Button>
-      <Button @click="resetGame">Reset</Button>
-    </div>
   </div>
 </template>

@@ -1,19 +1,27 @@
-import { create, empty, type Grid } from '@/model/Sudoku'
+import { create, empty, type Game } from '@/model/Sudoku'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useSudoku = defineStore('sudoku', () => {
-  const grid = ref<Grid>({
-    cells: localStorage.getItem('cells') ? JSON.parse(localStorage.getItem('cells') || '') : empty()
-  })
+  const fromLocal = fromLocalStorage()
+  const game = ref<Game>(fromLocal || { grid: empty(), difficulty: 'normal' })
 
   const newGame = () => {
-    grid.value.cells = create({ difficulty: 'normal' })
+    game.value.grid = create({ difficulty: 'normal' })
   }
 
   const resetGame = () => {
-    grid.value.cells = grid.value.cells.map((cell) => ({ ...cell, enteredValue: null }))
+    game.value.grid = game.value.grid.map((cell) => ({ ...cell, enteredValue: null }))
   }
 
-  return { grid, newGame, resetGame }
+  const persist = (game: Game) => {
+    localStorage.setItem('game', JSON.stringify(game))
+  }
+
+  return { game, newGame, resetGame, persist }
 })
+
+const fromLocalStorage = (): Game | null => {
+  const stringvalue = localStorage.getItem('game')
+  return stringvalue ? JSON.parse(stringvalue) : null
+}
