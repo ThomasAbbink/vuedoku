@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 <template>
   <button
-    class="grid grid-cols-[0.3rem_1fr_0.3rem] grid-rows-[0.3rem_1fr_0.3rem] group max-w-fit overflow-hidden"
+    class="grid grid-cols-[0.3rem_1fr_0.3rem] grid-rows-[0.3rem_1fr_0.3rem] group max-w-fit overflow-hidden select-none"
   >
     <div class="row-start-2 row-span-2 col-start-2 col-span-2 bg-red-400 w-full h-full"></div>
     <div
