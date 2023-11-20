@@ -3,7 +3,7 @@ import SudokuBoard from '@/components/SudokuBoard.vue'
 </script>
 
 <template>
-  <main class="flex items-center justify-center mt-20">
+  <main class="flex items-center justify-center">
     <SudokuBoard />
   </main>
 </template>
