@@ -15,10 +15,10 @@ export type Cell = {
 
 export type Difficulty = 'easy' | 'normal' | 'hard'
 
-const difficulties: Record<Difficulty, number> = {
-  easy: 0.4,
-  normal: 0.3,
-  hard: 0.2
+export const difficulties: Record<Difficulty, number> = {
+  easy: 0.5,
+  normal: 0.4,
+  hard: 0.3
 }
 
 export type Game = {

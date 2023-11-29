@@ -7,7 +7,7 @@ export const useSudoku = defineStore('sudoku', () => {
   const game = ref<Game>(fromLocal || { grid: empty(), difficulty: 'normal' })
 
   const newGame = () => {
-    game.value.grid = create({ difficulty: 'normal' })
+    game.value.grid = create({ difficulty: 'easy' })
   }
 
   const resetGame = () => {
