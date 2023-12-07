@@ -60,18 +60,27 @@ defineExpose({
   transform: translateY(-3rem);
 }
 
+dialog {
+  transition:
+    overlay 0.7s ease-out allow-discrete,
+    display 0.7s ease-out allow-discrete;
+}
+
 dialog::backdrop {
-  background-color: rgb(30 41 59 / 0);
-  transition: all 0.7s allow-discrete;
+  background-color: rgb(15 23 42 / 0);
+  transition:
+    display 0.7s allow-discrete,
+    overlay 0.7s allow-discrete,
+    background-color 0.7s;
 }
 
 dialog[open]::backdrop {
-  background-color: rgb(30 41 59 / 0.95);
+  background-color: rgb(15 23 42/ 0.25);
 }
 
 @starting-style {
   dialog[open]::backdrop {
-    background-color: rgb(30 41 59 / 0.95);
+    background-color: rgb(15 23 42 / 0);
   }
 }
 </style>
