@@ -27,14 +27,17 @@ defineExpose({
   <dialog
     autofocus
     ref="dialog"
-    class="flex rounded overflow-visible bg-transparent"
+    class="p-10 flex rounded overflow-visible bg-transparent w-full sm:w-fit"
+    :class="{
+      hidden: !isVisible
+    }"
     @close="isVisible = false"
   >
     <Transition name="fade">
       <GlowContainer v-if="isVisible">
         <form
           method="dialog"
-          class="px-32 py-10 flex items-center flex-col gap-8 bg-slate-900 rounded"
+          class="w-full sm:w-fit sm:px-32 py-10 flex items-center flex-col gap-8 bg-slate-900 rounded"
         >
           <slot></slot>
           <Button @click.prevent="cancel">cancel</Button>
@@ -57,13 +60,9 @@ defineExpose({
   transform: translateY(-3rem);
 }
 
-/* Transition the :backdrop when the dialog modal is promoted to the top layer */
 dialog::backdrop {
-  background-color: rgb(0 0 0 / 0);
-  transition:
-    display 0.7s allow-discrete,
-    overlay 0.7s allow-discrete,
-    background-color 0.7s;
+  background-color: rgb(30 41 59 / 0);
+  transition: all 0.7s allow-discrete;
 }
 
 dialog[open]::backdrop {
@@ -72,7 +71,7 @@ dialog[open]::backdrop {
 
 @starting-style {
   dialog[open]::backdrop {
-    background-color: rgb(0 0 0 / 0);
+    background-color: rgb(30 41 59 / 0.95);
   }
 }
 </style>

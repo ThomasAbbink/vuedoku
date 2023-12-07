@@ -74,12 +74,17 @@ const handleInput = (event: Event, cell: Cell) => {
 
     <ol
       v-if="game.grid"
-      class="grid grid-cols-[repeat(9,minmax(1rem,1fr))] grid-rows-[repeat(9,minmax(1rem,1fr))] w-fit place-self-center"
+      class="grid-flow-dense sticky grid grid-cols-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] grid-rows-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] w-fit place-self-center"
     >
+      <!-- making the grid lines inside the actual grid -->
+      <div class="col-start-4 row-span-full min-w-[4px]"></div>
+      <div class="col-start-8 row-span-full min-w-[4px]"></div>
+      <div class="col-span-full row-start-4 min-h-[4px]"></div>
+      <div class="col-span-full row-start-[8] min-h-[4px]"></div>
       <li
         v-for="cell in game.grid"
         :key="cell.index"
-        class="min-w-[2.5rem] w-10 aspect-square [&:nth-child(3n+0)]:border-r-4 [&:nth-child(9n)]:border-r-0 border-[rgba(2,6,23,0.7)] [&:nth-child(n+19)]:border-b-4 [&:nth-child(n+28)]:!border-b-0 [&:nth-child(n+46)]:!border-b-4 [&:nth-child(n+55)]:!border-b-0 select-none"
+        class="min-w-[2.5rem] w-10 aspect-square select-none"
       >
         <input
           min="1"

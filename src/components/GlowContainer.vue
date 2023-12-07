@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div class="glow flex">
+  <div class="glow flex grow">
     <slot></slot>
   </div>
 </template>
