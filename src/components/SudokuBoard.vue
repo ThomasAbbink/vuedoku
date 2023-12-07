@@ -51,7 +51,7 @@ const handleInput = (event: Event, cell: Cell) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 items-center">
+  <div class="flex flex-col gap-6 items-center w-full">
     <div class="flex items-end gap-2">
       <span class="font-mono text-white items-center flex text-sm h-fit">difficulty: </span
       ><span
@@ -74,7 +74,7 @@ const handleInput = (event: Event, cell: Cell) => {
 
     <ol
       v-if="game.grid"
-      class="grid-flow-dense sticky grid grid-cols-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] grid-rows-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] w-fit place-self-center"
+      class="w-full max-w-[368px] aspect-square grid-flow-dense sticky grid grid-cols-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] grid-rows-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] place-self-center"
     >
       <!-- making the grid lines inside the actual grid -->
       <div class="col-start-4 row-span-full min-w-[4px]"></div>
@@ -84,7 +84,7 @@ const handleInput = (event: Event, cell: Cell) => {
       <li
         v-for="cell in game.grid"
         :key="cell.index"
-        class="min-w-[1rem] w-8 sm:w-10 aspect-square select-none"
+        class="min-w-[1rem] w-full aspect-square select-none"
       >
         <input
           min="1"
