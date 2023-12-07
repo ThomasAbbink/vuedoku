@@ -3,9 +3,17 @@ import { useSudoku } from '@/stores/sudoku'
 import type {} from '@/stores/sudoku'
 import { watch } from 'vue'
 import Button from '../components/Button.vue'
-import { cellValues, type Cell, type CellValue } from '@/model/Sudoku'
-
+import {
+  cellValues,
+  type Cell,
+  type CellValue,
+  difficulties,
+  type Difficulty
+} from '@/model/Sudoku'
+import Modal from './Modal.vue'
+import { ref } from 'vue'
 const { game, newGame, resetGame, persist } = useSudoku()
+const modal = ref<InstanceType<typeof Modal>>()
 
 watch(
   game,
@@ -31,6 +39,10 @@ const parseInput = (input: string): Cell['enteredValue'] => {
   }
 }
 
+const onClickNewGame = () => {
+  modal.value?.show()
+}
+
 const handleInput = (event: Event, cell: Cell) => {
   const parsed = parseInput((event.target as HTMLInputElement).value?.slice(-1))
   ;(event.target as HTMLInputElement).value = parsed?.toString() || ''
@@ -49,12 +61,20 @@ const handleInput = (event: Event, cell: Cell) => {
       >
     </div>
     <div class="flex gap-4">
-      <Button @click="newGame">New game</Button>
+      <Button @click="onClickNewGame">New game</Button>
       <Button @click="resetGame">Reset</Button>
     </div>
+    <Modal ref="modal">
+      <ol class="flex flex-col gap-2">
+        <li v-for="difficulty in Object.keys(difficulties)" :key="difficulty">
+          <Button @click="newGame(difficulty as Difficulty)">{{ difficulty }}</Button>
+        </li>
+      </ol>
+    </Modal>
+
     <ol
       v-if="game.grid"
-      class="grid grid-cols-[repeat(9,minmax(1rem,1fr))] grid-rows-[repeat(9,minmax(1rem,1fr))] w-fit place-self-center glow"
+      class="grid grid-cols-[repeat(9,minmax(1rem,1fr))] grid-rows-[repeat(9,minmax(1rem,1fr))] w-fit place-self-center"
     >
       <li
         v-for="cell in game.grid"
@@ -79,50 +99,3 @@ const handleInput = (event: Event, cell: Cell) => {
     </ol>
   </div>
 </template>
-
-<style>
-:root {
-  --color-1: #450a0a;
-  --color-2: #f87171;
-  --color-3: #fef2f2;
-}
-
-@property --angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.glow {
-  position: relative;
-}
-.glow::before,
-.glow::after {
-  content: '';
-  inset: -0.3rem;
-  position: absolute;
-
-  background: conic-gradient(
-    from var(--angle, 0deg),
-    var(--color-1),
-    var(--color-2),
-    var(--color-3),
-    var(--color-2),
-    var(--color-1)
-  );
-  z-index: -1;
-  animation: rotation 20s linear infinite;
-}
-.glow::after {
-  filter: blur(5px);
-}
-
-@keyframes rotation {
-  0% {
-    --angle: 0deg;
-  }
-  100% {
-    --angle: 360deg;
-  }
-}
-</style>

@@ -1,4 +1,4 @@
-import { create, empty, type Game } from '@/model/Sudoku'
+import { create, empty, type Difficulty, type Game } from '@/model/Sudoku'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -6,8 +6,9 @@ export const useSudoku = defineStore('sudoku', () => {
   const fromLocal = fromLocalStorage()
   const game = ref<Game>(fromLocal || { grid: empty(), difficulty: 'normal' })
 
-  const newGame = () => {
-    game.value.grid = create({ difficulty: 'easy' })
+  const newGame = (difficulty: Difficulty) => {
+    game.value.grid = create({ difficulty })
+    game.value.difficulty = difficulty
   }
 
   const resetGame = () => {
