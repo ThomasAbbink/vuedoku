@@ -84,7 +84,7 @@ const handleInput = (event: Event, cell: Cell) => {
       <li
         v-for="cell in game.grid"
         :key="cell.index"
-        class="min-w-[2.5rem] w-10 aspect-square select-none"
+        class="min-w-[1rem] w-8 sm:w-10 aspect-square select-none"
       >
         <input
           min="1"
