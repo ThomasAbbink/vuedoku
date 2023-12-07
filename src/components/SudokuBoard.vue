@@ -3,9 +3,17 @@ import { useSudoku } from '@/stores/sudoku'
 import type {} from '@/stores/sudoku'
 import { watch } from 'vue'
 import Button from '../components/Button.vue'
-import { cellValues, type Cell, type CellValue } from '@/model/Sudoku'
-
+import {
+  cellValues,
+  type Cell,
+  type CellValue,
+  difficulties,
+  type Difficulty
+} from '@/model/Sudoku'
+import Modal from './Modal.vue'
+import { ref } from 'vue'
 const { game, newGame, resetGame, persist } = useSudoku()
+const modal = ref<InstanceType<typeof Modal>>()
 
 watch(
   game,
@@ -31,6 +39,10 @@ const parseInput = (input: string): Cell['enteredValue'] => {
   }
 }
 
+const onClickNewGame = () => {
+  modal.value?.show()
+}
+
 const handleInput = (event: Event, cell: Cell) => {
   const parsed = parseInput((event.target as HTMLInputElement).value?.slice(-1))
   ;(event.target as HTMLInputElement).value = parsed?.toString() || ''
@@ -49,17 +61,30 @@ const handleInput = (event: Event, cell: Cell) => {
       >
     </div>
     <div class="flex gap-4">
-      <Button @click="newGame">New game</Button>
+      <Button @click="onClickNewGame">New game</Button>
       <Button @click="resetGame">Reset</Button>
     </div>
+    <Modal ref="modal">
+      <ol class="flex flex-col gap-2">
+        <li v-for="difficulty in Object.keys(difficulties)" :key="difficulty">
+          <Button @click="newGame(difficulty as Difficulty)">{{ difficulty }}</Button>
+        </li>
+      </ol>
+    </Modal>
+
     <ol
       v-if="game.grid"
-      class="grid grid-cols-[repeat(9,minmax(1rem,1fr))] grid-rows-[repeat(9,minmax(1rem,1fr))] w-fit place-self-center glow"
+      class="grid-flow-dense sticky grid grid-cols-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] grid-rows-[repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))_4px_repeat(3,minmax(1rem,1fr))] w-fit place-self-center"
     >
+      <!-- making the grid lines inside the actual grid -->
+      <div class="col-start-4 row-span-full min-w-[4px]"></div>
+      <div class="col-start-8 row-span-full min-w-[4px]"></div>
+      <div class="col-span-full row-start-4 min-h-[4px]"></div>
+      <div class="col-span-full row-start-[8] min-h-[4px]"></div>
       <li
         v-for="cell in game.grid"
         :key="cell.index"
-        class="min-w-[2.5rem] w-10 aspect-square [&:nth-child(3n+0)]:border-r-4 [&:nth-child(9n)]:border-r-0 border-[rgba(2,6,23,0.7)] [&:nth-child(n+19)]:border-b-4 [&:nth-child(n+28)]:!border-b-0 [&:nth-child(n+46)]:!border-b-4 [&:nth-child(n+55)]:!border-b-0 select-none"
+        class="min-w-[2.5rem] w-10 aspect-square select-none"
       >
         <input
           min="1"
@@ -79,50 +104,3 @@ const handleInput = (event: Event, cell: Cell) => {
     </ol>
   </div>
 </template>
-
-<style>
-:root {
-  --color-1: #450a0a;
-  --color-2: #f87171;
-  --color-3: #fef2f2;
-}
-
-@property --angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.glow {
-  position: relative;
-}
-.glow::before,
-.glow::after {
-  content: '';
-  inset: -0.3rem;
-  position: absolute;
-
-  background: conic-gradient(
-    from var(--angle, 0deg),
-    var(--color-1),
-    var(--color-2),
-    var(--color-3),
-    var(--color-2),
-    var(--color-1)
-  );
-  z-index: -1;
-  animation: rotation 20s linear infinite;
-}
-.glow::after {
-  filter: blur(5px);
-}
-
-@keyframes rotation {
-  0% {
-    --angle: 0deg;
-  }
-  100% {
-    --angle: 360deg;
-  }
-}
-</style>
